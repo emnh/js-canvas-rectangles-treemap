@@ -48,7 +48,7 @@ while (queue.length > 0 && i < queue.length) {
 
   i++;
 
-  if (size(rect) >= 4) {
+  if (size(rect) >= 100) {
     const r = (x) => x + 0.12 * (Math.random() - 0.0);
     const rw = rect.x2 - rect.x1;
     const rh = rect.y2 - rect.y1;
@@ -108,12 +108,12 @@ while (queue.length > 0 && i < queue.length) {
     rects.push(rect);
     const dx = rect.x2 - rect.x1;
     const dy = rect.y2 - rect.y1;
-    const r = 0.5 * Math.sqrt(dx * dx + dy * dy);
+    const r = Math.sqrt(dx * dx + dy * dy);
 
     for (let x = rect.x1 - r; x < rect.x2 + r; x++) {
       for (let y = rect.y1 - r; y < rect.y2 + r; y++) {
-        const ddx = (x - Math.floor(0.5 * (rect.x1 + rect.x2))) / dx;
-        const ddy = (y - Math.floor(0.5 * (rect.y1 + rect.y2))) / dy;
+        const ddx = ((x - Math.floor(0.5 * (rect.x1 + rect.x2))) * dy) / r;
+        const ddy = ((y - Math.floor(0.5 * (rect.y1 + rect.y2))) * dx) / r;
         const dd = Math.sqrt(ddx * ddx + ddy * ddy);
         if (dd >= 1.0) {
           continue;
