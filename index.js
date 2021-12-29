@@ -22,10 +22,15 @@ let rect = {
   y1: 0,
   x2: w,
   y2: h,
+  // color: {
+  //   r: Math.random() + 0.5,
+  //   g: Math.random() + 0.5,
+  //   b: Math.random() + 0.5,
+  // },
   color: {
-    r: Math.random(),
-    g: Math.random(),
-    b: Math.random(),
+    r: 0.0,
+    g: 0.0,
+    b: 0.0,
   },
 };
 
@@ -44,7 +49,7 @@ while (queue.length > 0 && i < queue.length) {
   i++;
 
   if (size(rect) >= 4) {
-    const r = (x) => x + 0.1 * (Math.random() - 0.5);
+    const r = (x) => x + 0.12 * (Math.random() - 0.0);
     const rw = rect.x2 - rect.x1;
     const rh = rect.y2 - rect.y1;
     const aw = Math.floor(rw * Math.random());
@@ -95,16 +100,30 @@ while (queue.length > 0 && i < queue.length) {
         b: r(rect.color.b),
       },
     };
-
     queue.push(a1);
     queue.push(a2);
     queue.push(b1);
     queue.push(b2);
   } else {
     rects.push(rect);
-    for (let x = rect.x1; x < rect.x2; x++) {
-      for (let y = rect.y1; y < rect.y2; y++) {
-        colors[x + ',' + y] = rect.color;
+    const dx = rect.x2 - rect.x1;
+    const dy = rect.y2 - rect.y1;
+    const r = 0.5 * Math.sqrt(dx * dx + dy * dy);
+
+    for (let x = rect.x1 - r; x < rect.x2 + r; x++) {
+      for (let y = rect.y1 - r; y < rect.y2 + r; y++) {
+        const ddx = (x - Math.floor(0.5 * (rect.x1 + rect.x2))) / dx;
+        const ddy = (y - Math.floor(0.5 * (rect.y1 + rect.y2))) / dy;
+        const dd = Math.sqrt(ddx * ddx + ddy * ddy);
+        if (dd >= 1.0) {
+          continue;
+        }
+        const t = [x + ',' + y];
+        if (t in colors) {
+          colors[t] += rect.color;
+        } else {
+          colors[t] = rect.color;
+        }
       }
     }
   }
