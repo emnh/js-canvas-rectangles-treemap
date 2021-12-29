@@ -20,8 +20,8 @@ const f = (x) => Math.max(0, Math.min(255.0, Math.floor(x * 255.0)));
 let rect = {
   x1: 0,
   y1: 0,
-  x2: 0,
-  y2: 0,
+  x2: w,
+  y2: h,
   color: {
     r: Math.random(),
     g: Math.random(),
@@ -36,40 +36,68 @@ const rects = [];
 const queue = [rect];
 
 let i = 0;
-while (queue.length > 0 && i < 100 && i < queue.length) {
+while (queue.length > 0 && i < queue.length) {
   const rect = queue[i];
 
   i++;
 
-  if (size(rect) >= 40) {
+  if (size(rect) >= 100) {
+    const r = (x) => x + 0.5 * (Math.random() - 0.5);
     const rw = rect.x2 - rect.x1;
     const rh = rect.y2 - rect.y1;
-    const aw = Math.floor(rw * 0.5);
-    const ah = Math.foor(rh * 0.5);
-    const a = {
+    const aw = Math.floor(rw * Math.random());
+    const ah = Math.floor(rh * Math.random());
+    const midx = rect.x1 + aw;
+    const midy = rect.y1 + ah;
+    const a1 = {
       x1: rect.x1,
-      x2: rect.x1 + aw,
+      x2: midx,
       y1: rect.y1,
-      y2: rect.y1 + ah,
+      y2: midy,
       color: {
-        r: 0.5 * (rect.color.r + Math.random()),
-        g: 0.5 * (rect.color.g + Math.random()),
-        b: 0.5 * (rect.color.b + Math.random()),
+        r: r(rect.color.r),
+        g: r(rect.color.g),
+        b: r(rect.color.b),
       },
     };
-    const b = {
-      x1: rect.x1 + aw,
+    const a2 = {
+      x1: midx,
       x2: rect.x2,
-      y1: rect.y1 + ah,
+      y1: rect.y1,
+      y2: midy,
+      color: {
+        r: r(rect.color.r),
+        g: r(rect.color.g),
+        b: r(rect.color.b),
+      },
+    };
+    const b1 = {
+      x1: rect.x1,
+      x2: midx,
+      y1: midy,
       y2: rect.y2,
       color: {
-        r: 0.5 * (rect.color.r - Math.random()),
-        g: 0.5 * (rect.color.g - Math.random()),
-        b: 0.5 * (rect.color.b - Math.random()),
+        r: r(rect.color.r),
+        g: r(rect.color.g),
+        b: r(rect.color.b),
       },
     };
-    queue.push(a);
-    queue.push(b);
+    const b2 = {
+      x1: midx,
+      x2: rect.x2,
+      y1: midy,
+      y2: rect.y2,
+      color: {
+        r: r(rect.color.r),
+        g: r(rect.color.g),
+        b: r(rect.color.b),
+      },
+    };
+
+    queue.push(a1);
+    queue.push(a2);
+    queue.push(b1);
+    queue.push(b2);
   } else {
     rects.push(rect);
   }
@@ -83,7 +111,7 @@ for (let x = 0; x < w; x++) {
     let b = 0;
     for (let i = 0; i < rects.length; i++) {
       const rect = rects[i];
-      if (x >= rect.x1 && x <= rect.x2 && y >= rect.y2 && y <= rect.y2) {
+      if (x >= rect.x1 && x <= rect.x2 && y >= rect.y1 && y <= rect.y2) {
         r = rect.color.r;
         g = rect.color.g;
         b = rect.color.b;
