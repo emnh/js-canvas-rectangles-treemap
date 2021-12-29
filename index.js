@@ -112,10 +112,10 @@ while (queue.length > 0 && i < queue.length) {
 
     for (let x = rect.x1 - r; x < rect.x2 + r; x++) {
       for (let y = rect.y1 - r; y < rect.y2 + r; y++) {
-        const ddx = (x - Math.floor(0.5 * (rect.x1 + rect.x2))) * dy;
-        const ddy = (y - Math.floor(0.5 * (rect.y1 + rect.y2))) * dx;
+        const ddx = (x - Math.floor(0.5 * (rect.x1 + rect.x2))) / dy;
+        const ddy = (y - Math.floor(0.5 * (rect.y1 + rect.y2))) / dx;
         const dd = Math.sqrt(ddx * ddx + ddy * ddy);
-        if (dd >= r) {
+        if (dd >= 1.0) {
           continue;
         }
         const t = [x + ',' + y];
