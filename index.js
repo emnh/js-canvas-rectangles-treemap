@@ -1,8 +1,8 @@
 // Import stylesheets
 import './style.css';
 
-const w = 400;
-const h = 400;
+const w = 800;
+const h = 800;
 
 const canvas = document.createElement('canvas');
 
@@ -35,14 +35,16 @@ const rects = [];
 
 const queue = [rect];
 
+const colors = {};
+
 let i = 0;
 while (queue.length > 0 && i < queue.length) {
   const rect = queue[i];
 
   i++;
 
-  if (size(rect) >= 100) {
-    const r = (x) => x + 0.5 * (Math.random() - 0.5);
+  if (size(rect) >= 4) {
+    const r = (x) => x + 0.1 * (Math.random() - 0.5);
     const rw = rect.x2 - rect.x1;
     const rh = rect.y2 - rect.y1;
     const aw = Math.floor(rw * Math.random());
@@ -100,24 +102,37 @@ while (queue.length > 0 && i < queue.length) {
     queue.push(b2);
   } else {
     rects.push(rect);
+    for (let x = rect.x1; x < rect.x2; x++) {
+      for (let y = rect.y1; y < rect.y2; y++) {
+        colors[x + ',' + y] = rect.color;
+      }
+    }
   }
 }
 
 for (let x = 0; x < w; x++) {
   for (let y = 0; y < h; y++) {
     const idx = 4 * (y * w + x);
-    let r = 1;
-    let g = 0;
-    let b = 0;
-    for (let i = 0; i < rects.length; i++) {
-      const rect = rects[i];
-      if (x >= rect.x1 && x <= rect.x2 && y >= rect.y1 && y <= rect.y2) {
-        r = rect.color.r;
-        g = rect.color.g;
-        b = rect.color.b;
-        break;
-      }
-    }
+    const color =
+      x + ',' + y in colors
+        ? colors[x + ',' + y]
+        : {
+            r: 1,
+            g: 0,
+            b: 0,
+          };
+    let r = color.r;
+    let g = color.g;
+    let b = color.b;
+    // for (let i = 0; i < rects.length; i++) {
+    //   const rect = rects[i];
+    //   if (x >= rect.x1 && x <= rect.x2 && y >= rect.y1 && y <= rect.y2) {
+    //     r = rect.color.r;
+    //     g = rect.color.g;
+    //     b = rect.color.b;
+    //     break;
+    //   }
+    // }
     data.data[idx + 0] = f(r);
     data.data[idx + 1] = f(g);
     data.data[idx + 2] = f(b);
