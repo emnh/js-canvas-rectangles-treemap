@@ -49,11 +49,18 @@ while (queue.length > 0 && i < queue.length) {
   i++;
 
   if (size(rect) >= 4) {
-    const r = (x) => x + 0.12 * (Math.random() - 0.0);
+    const r = (x) => x + 0.1 * (Math.random() - 0.0);
     const rw = rect.x2 - rect.x1;
     const rh = rect.y2 - rect.y1;
-    const aw = Math.floor(rw * Math.random());
-    const ah = Math.floor(rh * Math.random());
+    const divideHorizontalOrVertical = Math.random() * rw > Math.random() * rh;
+    const aw = divideHorizontalOrVertical
+      ? Math.floor(rw * Math.random())
+      : 1.0;
+    // Math.floor(rw * (0.5 + 0.5 * (Math.random() - 0.5))) : 1.0;
+    const ah = !divideHorizontalOrVertical
+      ? Math.floor(rh * Math.random())
+      : 1.0;
+    // Math.floor(rh * (0.5 + 0.5 * (Math.random() - 0.5))) : 1.0;
     const midx = rect.x1 + aw;
     const midy = rect.y1 + ah;
     const a1 = {
@@ -115,17 +122,18 @@ while (queue.length > 0 && i < queue.length) {
         const ddx = (x - Math.floor(0.5 * (rect.x1 + rect.x2))) / dx;
         const ddy = (y - Math.floor(0.5 * (rect.y1 + rect.y2))) / dy;
         const dd = Math.sqrt(ddx * ddx + ddy * ddy);
-        if (dd >= 1.0) {
+        if (dd >= 2.0) {
           continue;
         }
         const t = [x + ',' + y];
         if (t in colors) {
-          const k = 0.0;
+          const k = (x, y) => Math.min(x, y);
           colors[t] = {
-            r: k + colors[t].r * rect.color.r,
-            g: k + colors[t].g * rect.color.g,
-            b: k + colors[t].b * rect.color.b
-          }
+            r: k(colors[t].r, rect.color.r),
+            g: k(colors[t].g, rect.color.g),
+            b: k(colors[t].b, rect.color.b),
+          };
+          // colors[t] = rect.color;
         } else {
           colors[t] = rect.color;
         }
