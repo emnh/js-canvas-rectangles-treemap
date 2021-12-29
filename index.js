@@ -119,15 +119,15 @@ while (queue.length > 0 && i < queue.length) {
 
     for (let x = rect.x1 - r; x < rect.x2 + r; x++) {
       for (let y = rect.y1 - r; y < rect.y2 + r; y++) {
-        const ddx = (x - Math.floor(0.5 * (rect.x1 + rect.x2))) / dx;
-        const ddy = (y - Math.floor(0.5 * (rect.y1 + rect.y2))) / dy;
+        const ddx = (x - Math.floor(0.5 * (rect.x1 + rect.x2))) / dy;
+        const ddy = (y - Math.floor(0.5 * (rect.y1 + rect.y2))) / dx;
         const dd = Math.sqrt(ddx * ddx + ddy * ddy);
         if (dd >= 2.0) {
           continue;
         }
         const t = [x + ',' + y];
         if (t in colors) {
-          const k = (x, y) => Math.min(x, y);
+          const k = (x, y) => x * y;
           colors[t] = {
             r: k(colors[t].r, rect.color.r),
             g: k(colors[t].g, rect.color.g),
