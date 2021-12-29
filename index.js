@@ -108,14 +108,14 @@ while (queue.length > 0 && i < queue.length) {
     rects.push(rect);
     const dx = rect.x2 - rect.x1;
     const dy = rect.y2 - rect.y1;
-    const r = Math.sqrt(dx * dx + dy * dy);
+    const r = Math.floor(Math.sqrt(dx * dx + dy * dy));
 
     for (let x = rect.x1 - r; x < rect.x2 + r; x++) {
       for (let y = rect.y1 - r; y < rect.y2 + r; y++) {
-        const ddx = ((x - Math.floor(0.5 * (rect.x1 + rect.x2))) * dy) / r;
-        const ddy = ((y - Math.floor(0.5 * (rect.y1 + rect.y2))) * dx) / r;
+        const ddx = (x - Math.floor(0.5 * (rect.x1 + rect.x2))) * dy;
+        const ddy = (y - Math.floor(0.5 * (rect.y1 + rect.y2))) * dx;
         const dd = Math.sqrt(ddx * ddx + ddy * ddy);
-        if (dd >= 1.0) {
+        if (dd >= r) {
           continue;
         }
         const t = [x + ',' + y];
