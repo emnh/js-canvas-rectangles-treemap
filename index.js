@@ -1,8 +1,8 @@
 // Import stylesheets
 import './style.css';
 
-const w = 800;
-const h = 800;
+const w = 600;
+const h = 600;
 
 const canvas = document.createElement('canvas');
 
@@ -49,7 +49,7 @@ while (queue.length > 0 && i < queue.length) {
   i++;
 
   if (size(rect) >= 4) {
-    const r = (x) => x + 0.1 * (Math.random() - 0.0);
+    const r = (x) => x + 0.1 * (Math.random() - 0.2);
     const rw = rect.x2 - rect.x1;
     const rh = rect.y2 - rect.y1;
     const divideHorizontalOrVertical = Math.random() * rw > Math.random() * rh;
@@ -117,14 +117,17 @@ while (queue.length > 0 && i < queue.length) {
     const dy = rect.y2 - rect.y1;
     const r = Math.floor(Math.sqrt(dx * dx + dy * dy));
 
-    for (let x = rect.x1 - r; x < rect.x2 + r; x++) {
-      for (let y = rect.y1 - r; y < rect.y2 + r; y++) {
-        const ddx = (x - Math.floor(0.5 * (rect.x1 + rect.x2))) / dy;
-        const ddy = (y - Math.floor(0.5 * (rect.y1 + rect.y2))) / dx;
-        const dd = Math.sqrt(ddx * ddx + ddy * ddy);
-        if (dd >= 2.0) {
-          continue;
-        }
+    // for (let x = rect.x1 - r; x < rect.x2 + r; x++) {
+    //   for (let y = rect.y1 - r; y < rect.y2 + r; y++) {
+    //     const ddx = (x - Math.floor(0.5 * (rect.x1 + rect.x2))) / dy;
+    //     const ddy = (y - Math.floor(0.5 * (rect.y1 + rect.y2))) / dx;
+    //     const dd = Math.sqrt(ddx * ddx + ddy * ddy);
+    //     if (dd >= 2.0) {
+    //       continue;
+    //     }
+
+    for (let x = rect.x1; x < rect.x2; x++) {
+      for (let y = rect.y1; y < rect.y2; y++) {
         const t = [x + ',' + y];
         if (t in colors) {
           const k = (x, y) => x * y;
